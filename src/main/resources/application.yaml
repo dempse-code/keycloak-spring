@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: faktura
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "${AUTH_SERVER_URL}/realms/${REALM}"
+      client:
+        provider:
+          keycloak:
+            issuer-uri: "${AUTH_SERVER_URL}/realms/${REALM}"
+            user-name-attribute: preferred_username
+api:
+  url: "/api/v1"
+server:
+  port: 8082
+
+client-id: "${CLIENT_ID}"
+
+

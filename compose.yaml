@@ -1,0 +1,39 @@
+services:
+  faktura:
+    container_name: faktura
+    restart: always
+    env_file:
+      - ./docker/.env
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - keycloak
+    networks:
+      - keycloak-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    restart: always
+    command:
+      - "start-dev"
+      - "--import-realm"
+    environment:
+      KC_FEATURES: preview
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - type: bind
+        source: ./keycloak/realm-export.json
+        target: /opt/keycloak/data/import/realm-export.json
+        read_only: true
+    ports:
+      - "8282:8080"
+    networks:
+      - keycloak-network
+networks:
+  keycloak-network:
+    driver: bridge
+
